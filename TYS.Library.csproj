@@ -58,6 +58,9 @@
   <ItemGroup>
     <Compile Include="EventLog\Const.cs" />
     <Compile Include="EventLog\EventLogWriter.cs" />
+    <Compile Include="Library\IRepository.cs" />
+    <Compile Include="Library\ITranslater.cs" />
+    <Compile Include="Library\IUseCase.cs" />
     <Compile Include="Library\JsonFileUtility.cs" />
     <Compile Include="Library\CheckPrintableJpeg.cs" />
     <Compile Include="Library\Get.cs" />
@@ -65,7 +68,6 @@
     <Compile Include="Library\RepositoryArgs.cs" />
     <Compile Include="Library\TranslaterArgs.cs" />
     <Compile Include="Library\UseCaseArgs.cs" />
-    <Compile Include="Plugin\IPluginCore.cs" />
     <Compile Include="Plugin\PluginManager.cs" />
     <Compile Include="Library\RepositoryRouter.cs" />
     <Compile Include="Library\TranslaterRouter.cs" />
