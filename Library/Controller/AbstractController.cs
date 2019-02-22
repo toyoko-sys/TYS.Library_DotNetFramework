@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 
 namespace TYS.Library.Controller
@@ -21,6 +24,47 @@ namespace TYS.Library.Controller
             if (args.Result)
             {
                 ret = Ok(args.Model);
+            }
+            else
+            {
+                if (args.Model is HttpStatusCode code)
+                {
+                    ret = StatusCode(code);
+                }
+                else
+                {
+                    ret = InternalServerError();
+                }
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// 画像の返却結果を作成します
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="mediaType">MIMEタイプ</param>
+        /// <returns></returns>
+        public IHttpActionResult CreateMediaResult(ResponseArgs args, string mediaType = "image/jpeg")
+        {
+            IHttpActionResult ret;
+
+            if (args.Result)
+            {
+                // Streamを画像で渡せるようByteContent化する
+                //  DataStoreの時点でbyte[]で受ければロスが減るのだけど…
+                Stream stream = args.Model;
+                ByteArrayContent content;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    stream.CopyTo(ms);
+                    stream.Dispose();
+                    content = new ByteArrayContent(ms.ToArray());
+                }
+                content.Headers.ContentType = MediaTypeHeaderValue.Parse(mediaType);
+
+                ret = Ok(content);
             }
             else
             {
