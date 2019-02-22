@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
@@ -7,22 +6,23 @@ using System.Threading.Tasks;
 namespace TYS.Library.WebAPI
 {
     /// <summary>
-    /// 外部サーバーアクセスGet用
+    /// 外部サーバーアクセスPost用
     /// </summary>
-    public abstract class Get
+    public abstract class Post
     {
         /// <summary>
         /// 呼び出し
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="url"></param>
+        /// <param name="content"></param>
         /// <returns></returns>
-        public async Task<dynamic> Call<T>(string url)
+        public virtual async Task<dynamic> Call<T>(string url, HttpContent content)
         {
             try
             {
                 HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = await client.PostAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {
                     dynamic responseContent = await this.GetResponseData<T>(response);
@@ -33,9 +33,9 @@ namespace TYS.Library.WebAPI
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 

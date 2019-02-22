@@ -47,7 +47,13 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,23 +64,26 @@
   <ItemGroup>
     <Compile Include="EventLog\Const.cs" />
     <Compile Include="EventLog\EventLogWriter.cs" />
-    <Compile Include="Library\IRepository.cs" />
-    <Compile Include="Library\ITranslater.cs" />
-    <Compile Include="Library\IUseCase.cs" />
+    <Compile Include="Library\Controller\AbstractController.cs" />
+    <Compile Include="Library\Controller\ResponseArgs.cs" />
+    <Compile Include="Library\Domain\IRepository.cs" />
+    <Compile Include="Library\Domain\ITranslater.cs" />
+    <Compile Include="Library\Domain\IUseCase.cs" />
     <Compile Include="Library\JsonFileUtility.cs" />
     <Compile Include="Library\CheckPrintableJpeg.cs" />
-    <Compile Include="Library\Get.cs" />
-    <Compile Include="Library\Post.cs" />
-    <Compile Include="Library\RepositoryArgs.cs" />
-    <Compile Include="Library\TranslaterArgs.cs" />
-    <Compile Include="Library\UseCaseArgs.cs" />
+    <Compile Include="Library\WebAPI\Get.cs" />
+    <Compile Include="Library\WebAPI\Post.cs" />
+    <Compile Include="Library\Domain\RepositoryArgs.cs" />
+    <Compile Include="Library\Domain\TranslaterArgs.cs" />
+    <Compile Include="Library\Domain\UseCaseArgs.cs" />
     <Compile Include="Plugin\PluginManager.cs" />
-    <Compile Include="Library\RepositoryRouter.cs" />
-    <Compile Include="Library\TranslaterRouter.cs" />
-    <Compile Include="Library\UseCaseRouter.cs" />
+    <Compile Include="Library\Domain\RepositoryRouter.cs" />
+    <Compile Include="Library\Domain\TranslaterRouter.cs" />
+    <Compile Include="Library\Domain\UseCaseRouter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
