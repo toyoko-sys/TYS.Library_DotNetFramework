@@ -52,19 +52,18 @@ namespace TYS.Library.Controller
 
             if (args.Result)
             {
-                // Streamを画像で渡せるようByteContent化する
-                //  DataStoreの時点でbyte[]で受ければロスが減るのだけど…
+                // DataStoreの時点でbyte[]で受ければロスが減るのだけど…
                 Stream stream = args.Model;
-                ByteArrayContent content;
-                using (MemoryStream ms = new MemoryStream())
+
+                MemoryStream ms = stream as MemoryStream;
+                if (ms == null)
                 {
+                    ms = new MemoryStream();
                     stream.CopyTo(ms);
                     stream.Dispose();
-                    content = new ByteArrayContent(ms.ToArray());
                 }
-                content.Headers.ContentType = MediaTypeHeaderValue.Parse(mediaType);
 
-                ret = Ok(content);
+                ret = new CustomMediaResult(Request, ms, mediaType);
             }
             else
             {

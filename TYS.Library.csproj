@@ -65,6 +65,7 @@
     <Compile Include="EventLog\Const.cs" />
     <Compile Include="EventLog\EventLogWriter.cs" />
     <Compile Include="Library\Controller\AbstractController.cs" />
+    <Compile Include="Library\Controller\CustomMediaResult.cs" />
     <Compile Include="Library\Controller\ResponseArgs.cs" />
     <Compile Include="Library\Domain\IRepository.cs" />
     <Compile Include="Library\Domain\ITranslater.cs" />
