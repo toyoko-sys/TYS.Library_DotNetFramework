@@ -47,12 +47,15 @@ namespace TYS.Library.WebAPI
         /// <returns></returns>
         protected virtual async Task<T> GetResponseData<T>(HttpResponseMessage response)
         {
-            T compositeImageIds;
-            using (var responseStream = await response.Content.ReadAsStreamAsync())
+            T compositeImageIds = default(T);
+            if (response.Content.Headers.ContentLength > 0)
             {
-                var type = typeof(T);
-                var serializer = new DataContractJsonSerializer(type);
-                compositeImageIds = (T)serializer.ReadObject(responseStream);
+                using (var responseStream = await response.Content.ReadAsStreamAsync())
+                {
+                    var type = typeof(T);
+                    var serializer = new DataContractJsonSerializer(type);
+                    compositeImageIds = (T)serializer.ReadObject(responseStream);
+                }
             }
             return compositeImageIds;
         }
