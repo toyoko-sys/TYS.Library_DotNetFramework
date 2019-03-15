@@ -23,10 +23,10 @@ namespace TYS.Library.WebAPI
         }
 
         /// <summary>
-        /// 初期化
+        /// コンストラクタ
         /// </summary>
         /// <returns></returns>
-        private static void Initialize()
+        static HttpClientManager()
         {
             if (clientList == null)
             {
@@ -46,8 +46,6 @@ namespace TYS.Library.WebAPI
         /// <returns></returns>
         public static HttpClient GetHttpClient(string url, ClientAcceptType clientType)
         {
-            Initialize();
-
             Uri uri = new Uri(url);
             string domain = uri.GetLeftPart(UriPartial.Authority);
             // ドメインのリサイクル設定が行われているか確認
