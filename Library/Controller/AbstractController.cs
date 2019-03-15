@@ -46,7 +46,7 @@ namespace TYS.Library.Controller
         /// <param name="args"></param>
         /// <param name="mediaType">MIMEタイプ</param>
         /// <returns></returns>
-        public IHttpActionResult CreateMediaResult(ResponseArgs args, string mediaType = "image/jpeg")
+        protected IHttpActionResult CreateMediaResult(ResponseArgs args, string mediaType = "image/jpeg")
         {
             IHttpActionResult ret;
 
