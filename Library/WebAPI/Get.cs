@@ -20,7 +20,7 @@ namespace TYS.Library.WebAPI
         {
             try
             {
-                HttpClient client = new HttpClient();
+                HttpClient client = HttpClientManager.GetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
                 HttpResponseMessage response = await client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {

@@ -73,6 +73,7 @@
     <Compile Include="Library\JsonFileUtility.cs" />
     <Compile Include="Library\CheckPrintableJpeg.cs" />
     <Compile Include="Library\WebAPI\Get.cs" />
+    <Compile Include="Library\WebAPI\HttpClientManager.cs" />
     <Compile Include="Library\WebAPI\Post.cs" />
     <Compile Include="Library\Domain\RepositoryArgs.cs" />
     <Compile Include="Library\Domain\TranslaterArgs.cs" />
