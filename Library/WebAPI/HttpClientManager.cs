@@ -11,7 +11,7 @@ namespace TYS.Library.WebAPI
     public static class HttpClientManager
     {
         private static Dictionary<string, int> domainList = new Dictionary<string, int>();
-        private static Dictionary<ClientAcceptType, HttpClient> clientList = null;
+        private static Dictionary<ClientAcceptType, HttpClient> clientList = new Dictionary<ClientAcceptType, HttpClient>();
 
         /// <summary>
         /// HttpClient作成時の設定タイプ
@@ -28,14 +28,10 @@ namespace TYS.Library.WebAPI
         /// <returns></returns>
         static HttpClientManager()
         {
-            if (clientList == null)
+            // タイプごとのリストを作成
+            foreach (ClientAcceptType type in Enum.GetValues(typeof(ClientAcceptType)))
             {
-                // タイプごとのリストを作成
-                clientList = new Dictionary<ClientAcceptType, HttpClient>();
-                foreach (ClientAcceptType type in Enum.GetValues(typeof(ClientAcceptType)))
-                {
-                    clientList.Add(type, null);
-                }
+                clientList.Add(type, null);
             }
         }
 
