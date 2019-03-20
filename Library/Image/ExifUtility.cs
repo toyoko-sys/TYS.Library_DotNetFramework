@@ -114,7 +114,7 @@ namespace TYS.Library.Image
             switch (orientation)
             {
                 case 2:
-                    // 上下反転(上下鏡像?)
+                    // 水平反転（水平反転は回転で補正出来ないのでそのまま）
                     rotation = 0;
                     break;
                 case 3:
@@ -122,11 +122,11 @@ namespace TYS.Library.Image
                     rotation = 180;
                     break;
                 case 4:
-                    // 左右反転
+                    // 垂直反転（垂直反転は回転で補正出来ないのでそのまま）
                     rotation = 0;
                     break;
                 case 5:
-                    // 上下反転、時計周りに270度回転
+                    // 水平反転、時計周りに270度回転（水平反転は回転で補正出来ないので2の状態にする）
                     rotation = 270;
                     break;
                 case 6:
@@ -134,7 +134,7 @@ namespace TYS.Library.Image
                     rotation = 90;
                     break;
                 case 7:
-                    // 上下反転、時計周りに90度回転
+                    // 垂直反転、時計周りに90度回転（垂直判定は回転で補正出来ないので4の状態にする）
                     rotation = 90;
                     break;
                 case 8:
