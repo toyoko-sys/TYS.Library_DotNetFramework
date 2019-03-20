@@ -9,31 +9,6 @@ namespace TYS.Library.Image
     /// </summary>
     public class ExifUtility
     {
-        private static int[] EXIF_USING_ID_FOR_IAGENT = {
-            EXIF_IMAGE_WIDTH,
-            EXIF_IMAGE_HEIGHT,
-            0x010f, /* モデル名 */
-            EXIF_ORIENTATION,
-            0x8827, /* ISOスピードレート */
-            0x829a, /* 露出時間 */
-            0x829d, /* Fナンバー */
-            0x9003, /* データ生成日時 */
-            0x9201, /* シャッタースピード */
-            0x9202, /* 絞り値 */
-            0x9203, /* 輝度値 */
-            0x9206, /* 被写体距離 */
-            0x9209, /* フラッシュ */
-            0xa002, /* 実行画像幅(横方向のピクセル数) */
-            0xa003, /* 実行画像高さ（高さ方向のピクセル数） */
-            0xa402, /* 露出モード */
-            0xa403, /* ホワイトバランス */
-            0xa406  /* 撮影シーンタイプ */
-        };
-
-        private const int EXIF_IMAGE_WIDTH = 0xA002;
-        private const int EXIF_IMAGE_HEIGHT = 0xA003;
-        private const int EXIF_ORIENTATION = 0x0112;
-
         /// <summary>
         /// Exif情報から回転情報を取得
         /// </summary>
@@ -61,7 +36,7 @@ namespace TYS.Library.Image
             if (pils.Length < 3) return ret;
 
             // Exif情報から回転情報を取得する(0x0112：回転情報)
-            int index = Array.IndexOf(pils, EXIF_ORIENTATION);
+            int index = Array.IndexOf(pils, (int)Exif.Orientation);
 
             try
             {
@@ -95,7 +70,7 @@ namespace TYS.Library.Image
             if (pils.Length < 3) return;
 
             // Exif情報から回転情報を取得する(0x0112：回転情報)
-            int index = Array.IndexOf(pils, EXIF_ORIENTATION);
+            int index = Array.IndexOf(pils, (int)Exif.Orientation);
 
             try
             {

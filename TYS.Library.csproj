@@ -75,6 +75,7 @@
     <Compile Include="Library\Domain\IRepository.cs" />
     <Compile Include="Library\Domain\ITranslater.cs" />
     <Compile Include="Library\Domain\IUseCase.cs" />
+    <Compile Include="Library\Image\Exif.cs" />
     <Compile Include="Library\Image\ExifUtility.cs" />
     <Compile Include="Library\JsonFileUtility.cs" />
     <Compile Include="Library\Image\CheckPrintableJpeg.cs" />
