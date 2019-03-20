@@ -1,5 +1,8 @@
 ﻿namespace TYS.Library.Image
 {
+    /// <summary>
+    /// サイズ計算クラス
+    /// </summary>
     public class CalcSize
     {
         /// <summary>

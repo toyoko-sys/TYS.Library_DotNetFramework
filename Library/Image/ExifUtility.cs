@@ -4,6 +4,9 @@ using System.Drawing;
 
 namespace TYS.Library.Image
 {
+    /// <summary>
+    /// Exif操作クラス
+    /// </summary>
     public class ExifUtility
     {
         private static int[] EXIF_USING_ID_FOR_IAGENT = {

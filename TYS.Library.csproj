@@ -77,7 +77,7 @@
     <Compile Include="Library\Domain\IUseCase.cs" />
     <Compile Include="Library\Image\ExifUtility.cs" />
     <Compile Include="Library\JsonFileUtility.cs" />
-    <Compile Include="Library\CheckPrintableJpeg.cs" />
+    <Compile Include="Library\Image\CheckPrintableJpeg.cs" />
     <Compile Include="Library\WebAPI\Get.cs" />
     <Compile Include="Library\WebAPI\HttpClientManager.cs" />
     <Compile Include="Library\WebAPI\Post.cs" />
