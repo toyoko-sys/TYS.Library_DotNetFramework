@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -39,8 +40,10 @@ namespace TYS.Library.WebAPI
         /// 使用できるHttpClientを取得
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="clientType"></param>
+        /// <param name="authenticationData">アクセス認証用設定値</param>
         /// <returns></returns>
-        public static HttpClient GetHttpClient(string url, ClientAcceptType clientType)
+        public static HttpClient GetHttpClient(string url, ClientAcceptType clientType, AuthenticationStruct? authenticationData = null)
         {
             Uri uri = new Uri(url);
             string domain = uri.GetLeftPart(UriPartial.Authority);
@@ -62,6 +65,14 @@ namespace TYS.Library.WebAPI
             if (client == null)
             {
                 client = CreateHttpClient(clientType);
+
+                if (authenticationData.HasValue)
+                {
+                    // 値が指定されていれば認証実施
+                    var authHeader = GetAuthenticationHeader(authenticationData.Value);
+                    client.DefaultRequestHeaders.Add("Authorization", authHeader);
+                }
+
                 clientList[clientType] = client;
             }
 
@@ -86,6 +97,32 @@ namespace TYS.Library.WebAPI
             }
 
             return client;
+        }
+
+        /// <summary>
+        /// Azure AD アクセス認証用ヘッダー付加情報取得
+        /// </summary>
+        /// <param name="authenticationData">アクセス認証用設定値</param>
+        private static string GetAuthenticationHeader(AuthenticationStruct authenticationData)
+        {
+            /* Azure AD テナントの設定 */
+            // トークン発行元
+            string authority = "https://login.microsoftonline.com/" + authenticationData.AdId;
+
+            /* トークン生成 */
+            // ADAL の AuthenticationContext オブジェクト
+            var authContext = new AuthenticationContext(authority);
+
+            // クライアント資格情報
+            var clientCredential = new ClientCredential(authenticationData.ClientApplicationId, authenticationData.SecretKey);
+
+            // トークン要求
+            var authResult = authContext.AcquireTokenAsync(authenticationData.ResourceApplicationId, clientCredential);
+
+            // Bearer トークン
+            string bearerToken = authResult.Result.CreateAuthorizationHeader();
+
+            return bearerToken;
         }
     }
 }

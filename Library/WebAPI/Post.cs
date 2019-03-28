@@ -10,6 +10,9 @@ namespace TYS.Library.WebAPI
     /// </summary>
     public abstract class Post
     {
+        // 認証設定値
+        protected AuthenticationStruct? AuthenticationData = null;
+
         /// <summary>
         /// 呼び出し
         /// </summary>
@@ -21,7 +24,7 @@ namespace TYS.Library.WebAPI
         {
             try
             {
-                HttpClient client = HttpClientManager.GetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
+                HttpClient client = HttpClientManager.GetHttpClient(url, HttpClientManager.ClientAcceptType.Default, AuthenticationData);
                 HttpResponseMessage response = await client.PostAsync(url, content);
                 if (response.IsSuccessStatusCode)
                 {

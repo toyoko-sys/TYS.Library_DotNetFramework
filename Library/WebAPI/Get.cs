@@ -10,6 +10,9 @@ namespace TYS.Library.WebAPI
     /// </summary>
     public abstract class Get
     {
+        // 認証設定値
+        protected AuthenticationStruct? AuthenticationData = null;
+
         /// <summary>
         /// 呼び出し
         /// </summary>
@@ -20,7 +23,7 @@ namespace TYS.Library.WebAPI
         {
             try
             {
-                HttpClient client = HttpClientManager.GetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
+                HttpClient client = HttpClientManager.GetHttpClient(url, HttpClientManager.ClientAcceptType.Default, AuthenticationData);
                 HttpResponseMessage response = await client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
@@ -37,7 +40,7 @@ namespace TYS.Library.WebAPI
                 throw;
             }
         }
-
+        
         /// <summary>
         /// 結果取得
         /// </summary>
