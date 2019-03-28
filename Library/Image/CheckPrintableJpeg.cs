@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace TYS.Library
+namespace TYS.Library.Image
 {
     /// <summary>
     /// CheckPrintableJpeg の概要の説明です
