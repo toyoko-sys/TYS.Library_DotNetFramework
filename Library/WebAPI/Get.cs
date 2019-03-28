@@ -12,13 +12,13 @@ namespace TYS.Library.WebAPI
     {
         // 認証実施時に設定
         // Azure AD テナントのディレクトリ ID
-        internal string AdId = null;
+        protected string AdId = null;
         // 認証対象のクライアントID
-        internal string ResourceApplicationId = null;
+        protected string ResourceApplicationId = null;
         // アクセス元 AD アプリのアプリケーションID
-        internal string ClientApplicationId = null;
+        protected string ClientApplicationId = null;
         // アクセス元 AD アプリで発行したキー
-        internal string SecretKey = null;
+        protected string SecretKey = null;
 
         /// <summary>
         /// 呼び出し
