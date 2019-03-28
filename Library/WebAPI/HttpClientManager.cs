@@ -1,7 +1,12 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TYS.Library.WebAPI
 {
@@ -39,8 +44,13 @@ namespace TYS.Library.WebAPI
         /// 使用できるHttpClientを取得
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="clientType"></param>
+        /// <param name="adId">Azure AD テナントのディレクトリ ID</param>
+        /// <param name="resourceApplicationId">認証対象のクライアントID</param>
+        /// <param name="clientApplicationId">アクセス元 AD アプリのアプリケーションID</param>
+        /// <param name="secretKey">アクセス元 AD アプリで発行したキー</param>
         /// <returns></returns>
-        public static HttpClient GetHttpClient(string url, ClientAcceptType clientType)
+        public static HttpClient GetHttpClient(string url, ClientAcceptType clientType, string adId = null, string resourceApplicationId = null, string clientApplicationId = null, string secretKey = null)
         {
             Uri uri = new Uri(url);
             string domain = uri.GetLeftPart(UriPartial.Authority);
@@ -62,6 +72,14 @@ namespace TYS.Library.WebAPI
             if (client == null)
             {
                 client = CreateHttpClient(clientType);
+
+                if (adId != null && resourceApplicationId != null && clientApplicationId != null && secretKey != null)
+                {
+                    // 値が指定されていれば認証実施
+                    var authHeader = GetAuthenticationHeader(adId, resourceApplicationId, clientApplicationId, secretKey);
+                    client.DefaultRequestHeaders.Add("Authorization", authHeader);
+                }
+
                 clientList[clientType] = client;
             }
 
@@ -86,6 +104,35 @@ namespace TYS.Library.WebAPI
             }
 
             return client;
+        }
+
+        /// <summary>
+        /// Azure AD アクセス認証用ヘッダー付加情報取得
+        /// </summary>
+        /// <param name="adId">Azure AD テナントのディレクトリ ID</param>
+        /// <param name="resourceApplicationId">認証対象のクライアントID</param>
+        /// <param name="clientApplicationId">アクセス元 AD アプリのアプリケーションID</param>
+        /// <param name="secretKey">アクセス元 AD アプリで発行したキー</param>
+        private static string GetAuthenticationHeader(string adId, string resourceApplicationId, string clientApplicationId, string secretKey)
+        {
+            /* Azure AD テナントの設定 */
+            // トークン発行元
+            string authority = "https://login.microsoftonline.com/" + adId;
+
+            /* トークン生成 */
+            // ADAL の AuthenticationContext オブジェクト
+            AuthenticationContext authContext = new AuthenticationContext(authority);
+
+            // クライアント資格情報
+            var clientCredential = new ClientCredential(clientApplicationId, secretKey);
+
+            // トークン要求
+            var authResult = authContext.AcquireTokenAsync(resourceApplicationId, clientCredential);
+
+            // Bearer トークン
+            string bearerToken = authResult.Result.CreateAuthorizationHeader();
+
+            return bearerToken;
         }
     }
 }

@@ -10,6 +10,16 @@ namespace TYS.Library.WebAPI
     /// </summary>
     public abstract class Get
     {
+        // 認証実施時に設定
+        // Azure AD テナントのディレクトリ ID
+        internal string AdId = null;
+        // 認証対象のクライアントID
+        internal string ResourceApplicationId = null;
+        // アクセス元 AD アプリのアプリケーションID
+        internal string ClientApplicationId = null;
+        // アクセス元 AD アプリで発行したキー
+        internal string SecretKey = null;
+
         /// <summary>
         /// 呼び出し
         /// </summary>
@@ -20,7 +30,7 @@ namespace TYS.Library.WebAPI
         {
             try
             {
-                HttpClient client = HttpClientManager.GetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
+                HttpClient client = HttpClientManager.GetHttpClient(url, HttpClientManager.ClientAcceptType.Default, AdId, ResourceApplicationId, ClientApplicationId, SecretKey);
                 HttpResponseMessage response = await client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
@@ -37,7 +47,7 @@ namespace TYS.Library.WebAPI
                 throw;
             }
         }
-
+        
         /// <summary>
         /// 結果取得
         /// </summary>
