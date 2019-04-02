@@ -12,7 +12,7 @@ namespace TYS.Library.WebAPI
     public static class HttpClientManager
     {
         private static Dictionary<string, int> domainList = new Dictionary<string, int>();
-        private static Dictionary<ClientAcceptType, HttpClient> clientList = new Dictionary<ClientAcceptType, HttpClient>();
+        private static Dictionary<string, Dictionary<ClientAcceptType, HttpClient>> clientList = new Dictionary<string, Dictionary<ClientAcceptType, HttpClient>>();
 
         /// <summary>
         /// HttpClient作成時の設定タイプ
@@ -29,11 +29,6 @@ namespace TYS.Library.WebAPI
         /// <returns></returns>
         static HttpClientManager()
         {
-            // タイプごとのリストを作成
-            foreach (ClientAcceptType type in Enum.GetValues(typeof(ClientAcceptType)))
-            {
-                clientList.Add(type, null);
-            }
         }
 
         /// <summary>
@@ -58,10 +53,20 @@ namespace TYS.Library.WebAPI
                 {
                     domainList.Add(domain, 0);
                 }
+
+                lock (clientList)
+                {
+                    // ドメイン・タイプごとのリストを作成
+                    clientList.Add(domain, new Dictionary<ClientAcceptType, HttpClient>());
+                    foreach (ClientAcceptType type in Enum.GetValues(typeof(ClientAcceptType)))
+                    {
+                        clientList[domain].Add(type, null);
+                    }
+                }
             }
 
-            // 同じClientTypeのHttpClientを取得、存在しなければ生成
-            HttpClient client = clientList[clientType];
+            // 同じドメイン・ClientTypeのHttpClientを取得、存在しなければ生成
+            HttpClient client = clientList[domain][clientType];
             if (client == null)
             {
                 client = CreateHttpClient(clientType);
@@ -73,7 +78,7 @@ namespace TYS.Library.WebAPI
                     client.DefaultRequestHeaders.Add("Authorization", authHeader);
                 }
 
-                clientList[clientType] = client;
+                clientList[domain][clientType] = client;
             }
 
             return client;
