@@ -36,10 +36,16 @@ namespace TYS.Library.WebAPI
                 }
                 else
                 {
-                    // トークンエラーの場合MaxRetryCountまでリトライ
-                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && RetryCount < MAX_RETRY_COUNT)
+                    // トークンエラーの場合情報更新
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
                         ResetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
+                    }
+
+                    // リトライ
+                    if(RetryCount < MAX_RETRY_COUNT)
+                    {
+                        RetryCount++;
                         return await Call<T>(url);
                     }
                     return null;
@@ -58,7 +64,6 @@ namespace TYS.Library.WebAPI
         /// <param name="type"></param>
         protected async void ResetHttpClient(string url, HttpClientManager.ClientAcceptType type)
         {
-            RetryCount++;
             HttpClientManager.UpdateAuthorizationHeader(url, type, AuthenticationData);
             await Task.Delay(delay);
         }
