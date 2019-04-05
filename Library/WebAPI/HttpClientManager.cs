@@ -129,5 +129,25 @@ namespace TYS.Library.WebAPI
 
             return bearerToken;
         }
+
+        /// <summary>
+        /// 認証トークンを更新
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="clientType"></param>
+        public static void UpdateAuthorizationHeader(string url, ClientAcceptType clientType, AuthenticationStruct? authenticationData)
+        {
+            Uri uri = new Uri(url);
+            string domain = uri.GetLeftPart(UriPartial.Authority);
+
+            HttpClient client = clientList[domain][clientType];
+            if (authenticationData.HasValue)
+            {
+                // トークン再発行
+                var authHeader = GetAuthenticationHeader(authenticationData.Value);
+                client.DefaultRequestHeaders.Remove("Authorization");
+                client.DefaultRequestHeaders.Add("Authorization", authHeader);
+            }
+        }
     }
 }

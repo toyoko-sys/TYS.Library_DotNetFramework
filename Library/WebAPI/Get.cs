@@ -12,6 +12,10 @@ namespace TYS.Library.WebAPI
     {
         // 認証設定値
         protected AuthenticationStruct? AuthenticationData = null;
+        // リトライ回数
+        protected const int MAX_RETRY_COUNT = 5;
+        protected int RetryCount = 0;
+        protected readonly TimeSpan delay = TimeSpan.FromSeconds(5);
 
         /// <summary>
         /// 呼び出し
@@ -32,6 +36,12 @@ namespace TYS.Library.WebAPI
                 }
                 else
                 {
+                    // トークンエラーの場合MaxRetryCountまでリトライ
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && RetryCount < MAX_RETRY_COUNT)
+                    {
+                        ResetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
+                        return await Call<T>(url);
+                    }
                     return null;
                 }
             }
@@ -41,6 +51,18 @@ namespace TYS.Library.WebAPI
             }
         }
         
+        /// <summary>
+        /// HttpClient設定を再設定
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="type"></param>
+        protected async void ResetHttpClient(string url, HttpClientManager.ClientAcceptType type)
+        {
+            RetryCount++;
+            HttpClientManager.UpdateAuthorizationHeader(url, type, AuthenticationData);
+            await Task.Delay(delay);
+        }
+
         /// <summary>
         /// 結果取得
         /// </summary>
