@@ -12,6 +12,30 @@ namespace TYS.Library.WebAPI
     {
         // 認証設定値
         protected AuthenticationStruct? AuthenticationData = null;
+        // リトライ回数
+        protected const int MAX_RETRY_COUNT = 5;
+        protected int RetryCount = 0;
+        protected readonly TimeSpan delay = TimeSpan.FromSeconds(5);
+
+        /// <summary>
+        /// 呼び出し　リトライ有/StringContent
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="contentJson"></param>
+        /// <returns></returns>
+        public virtual async Task<dynamic> Call<T>(string url, string contentJson)
+        {
+            dynamic result = null;
+            while (result == null && RetryCount < MAX_RETRY_COUNT)
+            {
+                HttpContent content = new StringContent(contentJson, System.Text.Encoding.UTF8, "application/json");
+                result = await Call<T>(url, content);
+                RetryCount++;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// 呼び出し
@@ -33,6 +57,11 @@ namespace TYS.Library.WebAPI
                 }
                 else
                 {
+                    // トークンエラーの場合情報更新
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        ResetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
+                    }
                     return null;
                 }
             }
@@ -61,6 +90,17 @@ namespace TYS.Library.WebAPI
                 }
             }
             return responseData;
+        }
+
+        /// <summary>
+        /// HttpClient設定を再設定
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="type"></param>
+        protected async void ResetHttpClient(string url, HttpClientManager.ClientAcceptType type)
+        {
+            HttpClientManager.UpdateAuthorizationHeader(url, type, AuthenticationData);
+            await Task.Delay(delay);
         }
     }
 }

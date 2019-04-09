@@ -1,38 +1,37 @@
 ﻿using System;
 using System.Net.Http;
-using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 
 namespace TYS.Library.WebAPI
 {
     /// <summary>
-    /// 外部サーバーアクセスGet用
+    /// 外部サーバーアクセスDelete用
     /// </summary>
-    public abstract class Get
+    public abstract class Delete
     {
         // 認証設定値
         protected AuthenticationStruct? AuthenticationData = null;
         // リトライ回数
         protected const int MAX_RETRY_COUNT = 5;
         protected int RetryCount = 0;
-        protected readonly TimeSpan delay = TimeSpan.FromSeconds(5);
+        private readonly TimeSpan delay = TimeSpan.FromSeconds(5);
 
         /// <summary>
         /// 呼び出し
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="url"></param>
+        /// <param name="content"></param>
         /// <returns></returns>
         public virtual async Task<dynamic> Call<T>(string url)
         {
             try
             {
                 HttpClient client = HttpClientManager.GetHttpClient(url, HttpClientManager.ClientAcceptType.Default, AuthenticationData);
-                HttpResponseMessage response = await client.GetAsync(url);
+                HttpResponseMessage response = await client.DeleteAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
-                    dynamic responseContent = await this.GetResponseData<T>(response);
-                    return responseContent;
+                    // 結果データなし
                 }
                 else
                 {
@@ -43,13 +42,14 @@ namespace TYS.Library.WebAPI
                     }
 
                     // リトライ
-                    if(RetryCount < MAX_RETRY_COUNT)
+                    if (RetryCount < MAX_RETRY_COUNT)
                     {
                         RetryCount++;
                         return await Call<T>(url);
                     }
-                    return null;
                 }
+
+                return response.StatusCode;
             }
             catch (Exception)
             {
@@ -57,27 +57,6 @@ namespace TYS.Library.WebAPI
             }
         }
 
-        /// <summary>
-        /// 結果取得
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        protected virtual async Task<T> GetResponseData<T>(HttpResponseMessage response)
-        {
-            T responseData = default(T);
-            if (response.Content.Headers.ContentLength > 0)
-            {
-                using (var responseStream = await response.Content.ReadAsStreamAsync())
-                {
-                    var type = typeof(T);
-                    var serializer = new DataContractJsonSerializer(type);
-                    responseData = (T)serializer.ReadObject(responseStream);
-                }
-            }
-            return responseData;
-        }
-        
         /// <summary>
         /// HttpClient設定を再設定
         /// </summary>
