@@ -15,7 +15,7 @@ namespace TYS.Library.WebAPI
         // リトライ回数
         protected const int MAX_RETRY_COUNT = 5;
         protected int RetryCount = 0;
-        private readonly TimeSpan delay = TimeSpan.FromSeconds(5);
+        protected readonly TimeSpan delay = TimeSpan.FromSeconds(5);
 
         /// <summary>
         /// 呼び出し　リトライ有/StringContent
