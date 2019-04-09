@@ -72,17 +72,6 @@ namespace TYS.Library.WebAPI
         }
 
         /// <summary>
-        /// HttpClient設定を再設定
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="type"></param>
-        protected async void ResetHttpClient(string url, HttpClientManager.ClientAcceptType type)
-        {
-            HttpClientManager.UpdateAuthorizationHeader(url, type, AuthenticationData);
-            await Task.Delay(delay);
-        }
-
-        /// <summary>
         /// 結果取得
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -101,6 +90,17 @@ namespace TYS.Library.WebAPI
                 }
             }
             return responseData;
+        }
+
+        /// <summary>
+        /// HttpClient設定を再設定
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="type"></param>
+        protected async void ResetHttpClient(string url, HttpClientManager.ClientAcceptType type)
+        {
+            HttpClientManager.UpdateAuthorizationHeader(url, type, AuthenticationData);
+            await Task.Delay(delay);
         }
     }
 }

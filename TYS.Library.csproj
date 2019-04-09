@@ -85,6 +85,15 @@
     <Compile Include="Library\Image\ExifUtility.cs" />
     <Compile Include="Library\JsonFileUtility.cs" />
     <Compile Include="Library\Image\CheckPrintableJpeg.cs" />
+    <Compile Include="Library\WebAPI\GetDefaultResStream.cs" />
+    <Compile Include="Library\WebAPI\GetDefault.cs" />
+    <Compile Include="Library\WebAPI\PostDefault.cs" />
+    <Compile Include="Library\WebAPI\PutDefault.cs" />
+    <Compile Include="Library\WebAPI\DeleteDefault.cs" />
+    <Compile Include="Library\WebAPI\Put.cs" />
+    <Compile Include="Library\WebAPI\Delete.cs" />
+    <Compile Include="Library\WebAPI\PostDefaultResString.cs" />
+    <Compile Include="Library\WebAPI\PostJsonResJson.cs" />
     <Compile Include="Library\WebAPI\AuthenticationStruct.cs" />
     <Compile Include="Library\WebAPI\Get.cs" />
     <Compile Include="Library\WebAPI\HttpClientManager.cs" />
