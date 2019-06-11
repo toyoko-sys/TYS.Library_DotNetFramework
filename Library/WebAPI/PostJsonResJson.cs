@@ -44,7 +44,7 @@ namespace TYS.Library.WebAPI
                     // トークンエラーの場合情報更新
                     if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        ResetHttpClient(url, HttpClientManager.ClientAcceptType.Json);
+                        await ResetHttpClient(url, HttpClientManager.ClientAcceptType.Json);
                     }
                     return null;
                 }

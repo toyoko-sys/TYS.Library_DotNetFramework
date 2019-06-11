@@ -38,7 +38,7 @@ namespace TYS.Library.WebAPI
                     // トークンエラーの場合情報更新
                     if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
-                        ResetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
+                        await ResetHttpClient(url, HttpClientManager.ClientAcceptType.Default);
                     }
 
                     // リトライ
@@ -62,10 +62,11 @@ namespace TYS.Library.WebAPI
         /// </summary>
         /// <param name="url"></param>
         /// <param name="type"></param>
-        protected async void ResetHttpClient(string url, HttpClientManager.ClientAcceptType type)
+        protected async Task<bool> ResetHttpClient(string url, HttpClientManager.ClientAcceptType type)
         {
             HttpClientManager.UpdateAuthorizationHeader(url, type, AuthenticationData);
             await Task.Delay(delay);
+            return false;
         }
     }
 }
